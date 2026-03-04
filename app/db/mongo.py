@@ -1,20 +1,20 @@
+import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from typing import Optional
 from pymongo import ASCENDING
-import asyncio
-
+from app.core.config import settings
 # Module level client
 _client: Optional[AsyncIOMotorClient] = None
 
 def get_client() -> AsyncIOMotorClient:
   global _client
   if _client == None:
-    _client = AsyncIOMotorClient("")
+    _client = AsyncIOMotorClient(settings.mongo_uri)
   return _client
 
 
-def get_database(dbName) -> AsyncIOMotorDatabase:
-  return get_client()["metadata_mango"]  # todo: this will the database name need to take from core
+def get_database() -> AsyncIOMotorDatabase:
+  return get_client()[settings.mongo_db]  # todo: this will the database name need to take from core
 
 
 async def ensure_indexing() -> None:
