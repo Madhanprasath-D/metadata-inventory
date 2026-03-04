@@ -1,0 +1,19 @@
+version : "1.0"
+
+services:
+  mongo:
+    image: mongo
+    container_name: inventory_mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_data:
