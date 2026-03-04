@@ -1,8 +1,10 @@
+# Initialize Mongo client once during startup
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from typing import Optional
 from pymongo import ASCENDING
 from app.core.config import settings
+
 # Module level client
 _client: Optional[AsyncIOMotorClient] = None
 

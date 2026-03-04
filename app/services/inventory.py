@@ -1,3 +1,5 @@
+# Business logic for storing/retrieving metadata
+
 from app.db.mongo import get_database
 from app.model.schemas import MetadataInfo
 from datetime import datetime, timezone

@@ -1,3 +1,4 @@
+# Background task for async URL processing
 import asyncio
 import httpx
 from app.services import inventory, retriever
