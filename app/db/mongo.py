@@ -14,7 +14,7 @@ def get_client() -> AsyncIOMotorClient:
 
 
 def get_database() -> AsyncIOMotorDatabase:
-  return get_client()[settings.mongo_db]  # todo: this will the database name need to take from core
+  return get_client()[settings.mongo_db] 
 
 
 async def ensure_indexing() -> None:

@@ -8,7 +8,7 @@ from app.worker import worker
 router = APIRouter(prefix="/metadata", tags=["inventory"])
 
 # POST /url/add -> the endpoint for adding metadata in inventory
-@router.post('/url/add', response_model=AcknowledgementResponse, status_code=status.HTTP_201_CREATED)
+@router.post('/add', response_model=AcknowledgementResponse, status_code=status.HTTP_201_CREATED)
 async def add_metadata(req: RequestInfo):
   url = req.url
   exist = await inventory.get_record(url=url)
