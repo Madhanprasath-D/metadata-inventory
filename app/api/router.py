@@ -7,6 +7,7 @@ from app.services import retriever, inventory
 from app.worker import worker
 
 logger = logging.getLogger(__name__)
+# router initialize
 router = APIRouter(prefix="/metadata", tags=["inventory"])
 
 
@@ -16,7 +17,7 @@ async def add_metadata(req: RequestInfo):
   
   url = str(req.url)
   exist = await inventory.get_record(url=url)
-  # check for presnr of data in db
+  # check for present of data in db
   if exist and exist.status == "success":
     return ResponseInfo(
       message="Record already exists.",
