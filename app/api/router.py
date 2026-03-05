@@ -5,6 +5,8 @@ from fastapi.responses import JSONResponse
 from app.model.schemas import RequestInfo, ResponseInfo
 from app.services import retriever, inventory
 from app.worker import worker
+from pydantic import HttpUrl, ValidationError
+from typing import Annotated
 
 logger = logging.getLogger(__name__)
 # router initialize
@@ -67,28 +69,30 @@ async def add_metadata(req: RequestInfo):
   202: {"model": ResponseInfo, "description": "Metadata scheduled for collection"},
 })
 async def get_metadata(
-  url: str = Query(..., description="the url that metadata will retrive")
+  url: Annotated[HttpUrl, Query(..., description="the url that metadata will retrive")]
 ):
+  url_str = str(url)
+  
   # get the data from db
-  record = await inventory.get_record(url)
+  record = await inventory.get_record(url_str)
 
   if record is not None:
-    logger.info(f"url {url} Record founded")
+    logger.info(f"url {url_str} Record founded")
     return ResponseInfo(
-      url=url,
+      url=url_str,
       message="Record founded",
       status= "success",
       metadata = record,
     )
-  logger.info(f"url {url} Record not founded")
+  logger.info(f"url {url_str} Record not founded")
   # creating a initial pending state and update it once successfull got the metadata.
-  await inventory.create_pending(url)
+  await inventory.create_pending(url_str)
   # background sheduler
-  worker.schedule_collection(url)
+  worker.schedule_collection(url_str)
 
   response = ResponseInfo(
     status="pending",
-    url=url,
+    url=url_str,
     message="Metadata not found, will be available shortly"
   )
   return JSONResponse(

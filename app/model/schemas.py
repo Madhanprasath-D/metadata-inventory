@@ -1,11 +1,11 @@
 # Pydantic models for request validation and response serialisation.
-from pydantic import BaseModel, AnyHttpUrl, Field
+from pydantic import BaseModel, HttpUrl, Field
 from typing import Dict, Any, Literal, Optional
 from datetime import datetime, timezone
 
 # Request model
 class RequestInfo(BaseModel):
-  url: AnyHttpUrl
+  url: HttpUrl
 
 # databse model
 class MetadataInfo(BaseModel):
