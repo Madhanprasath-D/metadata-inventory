@@ -7,12 +7,13 @@ services:
       dockerfile: Dockerfile
     container_name: metadata_api
     ports:
-      - 8000:8000
-    env_file:
-      - .env
+      - 5004:5004
+    environment:
+      MONGO_URI: mongodb://root:root@mongo:27017/metadata_inventory?authSource=admin
+      MONGO_DB: metadata_inventory
     depends_on:
-      - mongo:
-          condition: service_healthy
+      mongo:
+        condition: service_healthy
     restart: unless-stopped
 
   mongo:
@@ -27,7 +28,7 @@ services:
       - mongo_data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
+      interval: 120s
       timeout: 30s
       retries: 5
       start_period: 10s

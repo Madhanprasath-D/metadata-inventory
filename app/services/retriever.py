@@ -9,7 +9,8 @@ async def retrieve_metadata(
   
   async with httpx.AsyncClient(
     follow_redirects=True,
-    timeout= settings.http_timeout
+    timeout= settings.http_timeout,
+    verify=False
   ) as client:
     res = await client.get(url=url)
     res.raise_for_status()

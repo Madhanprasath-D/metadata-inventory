@@ -12,7 +12,7 @@ COLLECTION = "metadata"
 async def get_record(url: str):
   db = get_database()
   doc = await db[COLLECTION].find_one({"url": url}, {"_id": 0})
-  if doc in None:
+  if doc is None:
     return None
   logger.info("Metadata founded")
   return MetadataInfo(**doc)
@@ -30,27 +30,31 @@ async def create_pending(url: str) -> MetadataInfo:
 # updating success metadata in db 
 async def update_record_success(url: str, headers: dict, cookies: dict, page_source: str) -> None:
   db = get_database()
+  pg = page_source
   now = datetime.now(timezone.utc)
   logger.info("updating metadata")
-  await db[COLLECTION].update_one(
+  result = await db[COLLECTION].update_one(
     {"url":url},
     {
       "$set": {
         "status": "success",
         "headers": headers,
         "cookies": cookies,
-        "page_source": page_source,
+        "page_source": pg,
         "error": None,
         "updated_at": now,
       }
-    }
+    },
+    upsert=True
   )
+  logger.info(f"matched_count: {result.matched_count}")
+  logger.info(f"modified_count: {result.modified_count}")
 
 # updating failed status in db 
 async def update_record_failure(url: str, err_msg: str) -> None:
   db = get_database()
   now = datetime.now(timezone.utc)
-  logger.warn("updating metadata")
+  logger.warning("updating metadata")
   await db[COLLECTION].update_one(
     {"url":url},
     {

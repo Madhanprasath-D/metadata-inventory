@@ -38,5 +38,5 @@ def schedule_collection(url: str) -> asyncio.Task:
 
 
 def task_exception(task: asyncio.Task) -> None:
-  if not task.cancelled() and task_exception():
+  if not task.cancelled() and task.exception():
     print("error", task.get_name(), " :", task.exception())
