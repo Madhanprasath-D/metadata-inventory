@@ -11,11 +11,16 @@ COLLECTION = "metadata"
 # fetching data from db
 async def get_record(url: str):
   db = get_database()
-  doc = await db[COLLECTION].find_one({"url": url}, {"_id": 0})
-  if doc is None:
-    return None
-  logger.info("Metadata founded")
-  return MetadataInfo(**doc)
+  try:
+    doc = await db[COLLECTION].find_one({"url": url}, {"_id": 0})
+    if doc is None:
+      return None
+    logger.info("Metadata founded")
+    return MetadataInfo(**doc)
+  except Exception as e:
+    logger.exception("Getting data from db failed")
+    raise
+
 
 async def create_pending(url: str) -> MetadataInfo:
   db = get_database()
@@ -32,36 +37,43 @@ async def update_record_success(url: str, headers: dict, cookies: dict, page_sou
   db = get_database()
   pg = page_source
   now = datetime.now(timezone.utc)
-  logger.info("updating metadata")
-  result = await db[COLLECTION].update_one(
-    {"url":url},
-    {
-      "$set": {
-        "status": "success",
-        "headers": headers,
-        "cookies": cookies,
-        "page_source": pg,
-        "error": None,
-        "updated_at": now,
-      }
-    },
-    upsert=True
-  )
-  logger.info(f"matched_count: {result.matched_count}")
-  logger.info(f"modified_count: {result.modified_count}")
+  try:
+    logger.info("updating metadata")
+    db[COLLECTION].update_one(
+      {"url":url},
+      {
+        "$set": {
+          "status": "success",
+          "headers": headers,
+          "cookies": cookies,
+          "page_source": pg,
+          "error": None,
+          "updated_at": now,
+        }
+      },
+      upsert=True
+    )
+  except Exception as e:
+    logger.exception("update in database failed")
+    raise
+
 
 # updating failed status in db 
 async def update_record_failure(url: str, err_msg: str) -> None:
   db = get_database()
   now = datetime.now(timezone.utc)
-  logger.warning("updating metadata")
-  await db[COLLECTION].update_one(
-    {"url":url},
-    {
-      "$set":{
-        "status": "failed",
-        "error": err_msg,
-        "updated_at": now,
+  try:
+    logger.warning("updating metadata")
+    await db[COLLECTION].update_one(
+      {"url":url},
+      {
+        "$set":{
+          "status": "failed",
+          "error": err_msg,
+          "updated_at": now,
+        }
       }
-    }
-  )
+    )
+  except Exception as e:
+    logger.exception("update in database failed")
+    raise
