@@ -29,8 +29,9 @@ This starts:
 **3. Verify the service is running**
 
 curl http://localhost:5004/health
-# {"status": "ok"}
-
+```json
+{"status": "ok"}
+```
 
 
 ## Swagger API Docs
@@ -58,13 +59,13 @@ curl -X POST http://localhost:5004/metadata/add \
 
 
 **Response (201 Created):**
-
+```json
 {
   "url": "https://example.com",
   "status": "success",
   "message": "URL metadata stored"
 }
-
+```
 
 
 
@@ -81,7 +82,7 @@ curl "http://localhost:5004/metadata/fetch?url=https://example.com"
 
 
 **Response (200 OK):**
-
+```json
 {
   "url": "https://example.com",
   "status": "success",
@@ -92,20 +93,20 @@ curl "http://localhost:5004/metadata/fetch?url=https://example.com"
   "created_at": "2025-01-01T00:00:00Z",
   "updated_at": "2025-01-01T00:00:00Z"
 }
-
+```
 
 **Response (202 Accepted):**
-
+```json
 {
   "status": "pending",
   "url": "https://example.com",
   "message": "Metadata not found, will be available shortly"
 }
-
+```
 
 ## Database Schema
 
-
+```json
 {
   "url": "https://example.com",
   "status": "success | failed | pending",
@@ -116,7 +117,7 @@ curl "http://localhost:5004/metadata/fetch?url=https://example.com"
   "created_at": "",
   "updated_at": ""
 }
-
+```
 
 
 ## Design Notes
