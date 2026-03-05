@@ -27,7 +27,7 @@ async def ensure_indexing() -> None:
   # create index will help to incress the speed of reading data in O(log n)
   await db.metadata.create_index([("url", ASCENDING)], unique=True)
 
-async def wait_for_mango(reties: int = 5, delay: float = 2.0) -> None:
+async def wait_for_mongo(reties: int = 5, delay: float = 2.0) -> None:
   client = get_client()
   for attempt in range(reties):
     try:

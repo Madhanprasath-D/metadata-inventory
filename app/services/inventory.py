@@ -39,7 +39,7 @@ async def update_record_success(url: str, headers: dict, cookies: dict, page_sou
   now = datetime.now(timezone.utc)
   try:
     logger.info("updating metadata")
-    db[COLLECTION].update_one(
+    await db[COLLECTION].update_one(
       {"url":url},
       {
         "$set": {
