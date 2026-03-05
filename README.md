@@ -1,13 +1,13 @@
 # Metadata Inventory
 
----
+
 
 ## Prerequisites
 
 1. Docker and Docker Compose
 2. Python 3.11+ *(only needed for running tests locally outside Docker)*
 
----
+
 
 ## Quick Start
 
@@ -32,7 +32,6 @@ curl http://localhost:5004/health
 # {"status": "ok"}
 
 
----
 
 ## Swagger API Docs
 
@@ -40,7 +39,7 @@ FastAPI auto-generates interactive docs:
 
 **http://localhost:5004/docs**
 
----
+
 
 ## Endpoints
 
@@ -67,7 +66,7 @@ curl -X POST http://localhost:5004/metadata/add \
 }
 
 
----
+
 
 ### `GET /metadata/fetch?url={url}`
 
@@ -104,8 +103,6 @@ curl "http://localhost:5004/metadata/fetch?url=https://example.com"
 }
 
 
----
-
 ## Database Schema
 
 
@@ -121,7 +118,6 @@ curl "http://localhost:5004/metadata/fetch?url=https://example.com"
 }
 
 
----
 
 ## Design Notes
 
