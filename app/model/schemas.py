@@ -1,12 +1,13 @@
-# 
+# Pydantic models for request validation and response serialisation.
 from pydantic import BaseModel, HttpUrl
 from typing import Dict, Any, Literal, Optional
 from datetime import datetime
 
-
+# Request model
 class RequestInfo(BaseModel):
   url: HttpUrl
 
+# databse model
 class MetadataInfo(BaseModel):
   url: str
   headers: Optional[Dict[str, Any]] = None
@@ -17,6 +18,7 @@ class MetadataInfo(BaseModel):
   error: Optional[str] = None
   status:  Literal["success", "failed", "pending"]
 
+# Resonce model for ack
 class AcknowledgementResponse(BaseModel):
   message: str
   status: str

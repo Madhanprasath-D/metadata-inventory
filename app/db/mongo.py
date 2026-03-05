@@ -1,9 +1,12 @@
 # Initialize Mongo client once during startup
 import asyncio
+import logging
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from typing import Optional
 from pymongo import ASCENDING
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Module level client
 _client: Optional[AsyncIOMotorClient] = None
@@ -28,10 +31,12 @@ async def wait_for_mango(reties: int = 5, delay: float = 2.0) -> None:
   client = get_client()
   for attempt in range(reties):
     try:
+      logger.info("Attempting to connect")
       await client.admin.command('ping')
       return
     except Exception as exc:
       if attempt == reties - 1:
+        logger.error("Could not connect to the database")
         raise RuntimeError("Could not connect to the database") from exc
       await asyncio.sleep(delay=delay)
       

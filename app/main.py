@@ -2,12 +2,21 @@ from fastapi import FastAPI
 from app.api.router import router
 from app.db.mongo import ensure_indexing, wait_for_mango, close_client
 from contextlib import asynccontextmanager
+import logging
+
+logging.basicConfig(
+  level=logging.INFO,
+  format="%(asctime)s | %(levelname)-8s | %(name)s — %(message)s",
+)
+
+logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+  logger.info("Inventory server started...")
   await wait_for_mango()
   await ensure_indexing()
-
+  logger.info("Server ready")
   yield
   await close_client()
 
