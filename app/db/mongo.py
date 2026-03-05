@@ -29,6 +29,7 @@ async def ensure_indexing() -> None:
 
 async def wait_for_mango(reties: int = 5, delay: float = 2.0) -> None:
   client = get_client()
+  # checking db and atteplting to connect with retries
   for attempt in range(reties):
     try:
       logger.info("Attempting to connect")
